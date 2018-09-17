@@ -187,8 +187,6 @@ export class HyperScroll extends Component {
   _removeItem(i)  {
     if(this.state.maxPoolDim > (this._itemsPool || (this._itemsPool = [])).length)
       this._itemsPool.push(this._itemsDom.pop());
-    else
-      this._itemsMap.delete(this._itemsDom[i]);
   }
   _manageScroll() {
     const position = this._wire$[this._scrollProp];
