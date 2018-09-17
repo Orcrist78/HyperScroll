@@ -95,6 +95,7 @@ export class HyperScroll extends Component {
     const css = style.setProperty.bind(style);
 
     dynamicStyle.inc();
+    this.itemsBuffer = this.state.itemsBuffer;
     await this._getItemSize();
     css(`--hsi-${ this._hsDim }`, `${ this.state[this._itemDim] }px`);
     css(`--hss-${ this._hsDim }`, `${ this.state[this._itemDim] * this.state.data.length }px`);
@@ -177,11 +178,11 @@ export class HyperScroll extends Component {
       const itemDom = wire()`<div class="${ c }">${ itemObj }</div>`;
 
       itemDom.update = (d, t) => {
-        d >= 0 && itemObj.setState(this.state.data[d]);
+        d && itemObj.setState(d);
         itemDom.style.setProperty('transform', `${ this._transProp }(${ t * this.state[this._itemDim] }px)`);
         return itemDom;
       };
-      return itemDom.update(-1, i - this.itemsBuffer);
+      return itemDom.update(null, i - this.itemsBuffer);
     }
   }
   _removeItem(i)  {
@@ -198,7 +199,7 @@ export class HyperScroll extends Component {
       if(dir > 0) {
         for(let i = this.current; i < current; i++) {
           const idx = i + this.elemsCount - this.itemsBuffer;
-          const elem = this._itemsDom[0].update(idx, idx);
+          const elem = this._itemsDom[0].update(this.state.data[idx], idx);
 
           for(let i = 0; i < this.elemsCount - 1; i++) this._itemsDom[i] = this._itemsDom[i + 1];
           this._itemsDom[this.elemsCount - 1] = elem;
@@ -206,7 +207,7 @@ export class HyperScroll extends Component {
       } else {
         for(let i = this.current + this.elemsView; i > current + this.elemsView; i--) {
           const idx = i - this.elemsCount + this.itemsBuffer - 1;
-          const elem = this._itemsDom[this.elemsCount - 1].update(idx, idx);
+          const elem = this._itemsDom[this.elemsCount - 1].update(this.state.data[idx], idx);
 
           for(let i = this.elemsCount - 1; i > 0; i--) this._itemsDom[i] = this._itemsDom[i - 1];
           this._itemsDom[0] = elem;
