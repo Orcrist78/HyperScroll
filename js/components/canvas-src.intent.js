@@ -32,6 +32,7 @@ import {DynamicStyles} from "../libs/dynamic-style.js";
 
 const srcBmpMap = new Map();
 const elImgMap = new WeakMap();
+const bitmap = 'createImageBitmap' in window && !navigator.userAgent.toLowerCase().includes('firefox');
 const drawImg = (canvas, img) => { // TODO: handle pixelratio
   const {width, height} = img;
 
@@ -63,7 +64,7 @@ hyper.define('canvas-src', (el, src) => {
     img.onload = async () => { // TODO: handle error and abort cases
       img.onload = null;
       elImgMap.delete(el);
-      drawImg(el, srcBmpMap.set(src, await createImageBitmap(img)).get(src)); // TODO: move createBitmap on worker ?
+      drawImg(el, srcBmpMap.set(src, bitmap ? await createImageBitmap(img) : img).get(src)) // TODO: move createBitmap on worker ?
     };
     img.src = src;
   }

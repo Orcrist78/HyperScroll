@@ -61,8 +61,8 @@ export class ImageBox extends Component {
         class="image-box"
       >
         <canvas
-          canvas-src="${ `https://rsz.io/${ this.state.img.substr(8) }?w=140&downscale-prefilter=true&format=webp` }"
-        ></canvas> <!-- TODO: handle pixelratio -->
+          canvas-src="${ `https://rsz.io/${ this.state.img.substr(8) }?w=140&downscale-prefilter=true` }" <!-- TODO: handle pixelratio -->
+        ></canvas>
         <div>${ this.state.color }</div>
       </div>
     `;

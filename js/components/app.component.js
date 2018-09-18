@@ -1,3 +1,4 @@
+import "../vendor/resize-observer.min.js";
 import {Component, bind} from "../vendor/hyperhtml.min.js";
 import {DynamicStyles} from "../libs/dynamic-style.js";
 import {HyperScroll} from "./hyper-scroll.component.js";
@@ -19,6 +20,7 @@ import {RowBox} from "./row-box.component.js";
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     font-family: arial;
     font-weight: 400;
+    font-size: 13px;
   }
   html, body {
     margin: 0;

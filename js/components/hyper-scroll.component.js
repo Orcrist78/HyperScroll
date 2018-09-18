@@ -15,7 +15,7 @@
   OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
   PERFORMANCE OF THIS SOFTWARE.
 
-  HyperScroll@0.2Alpha
+  HyperScroll@0.2.1Alpha
 */
 
 
@@ -27,6 +27,7 @@ const dynamicStyle = new DynamicStyles(`
     width: var(--hs-width, 100%);
     height: var(--hs-height, 100%);
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     will-change: scroll-position;
   }
   .hyper-scroll .hs-scroller {
@@ -95,7 +96,6 @@ export class HyperScroll extends Component {
     const css = style.setProperty.bind(style);
 
     dynamicStyle.inc();
-    this.itemsBuffer = this.state.itemsBuffer;
     await this._getItemSize();
     css(`--hsi-${ this._hsDim }`, `${ this.state[this._itemDim] }px`);
     css(`--hss-${ this._hsDim }`, `${ this.state[this._itemDim] * this.state.data.length }px`);
@@ -166,7 +166,7 @@ export class HyperScroll extends Component {
         }
   }
   _getData(i) {
-    const idx = i - this.itemsBuffer;
+    const idx = i - (this.itemsBuffer || this.state.itemsBuffer);
 
     return this.state.data[idx > 0 ? idx : 0];
   }
@@ -182,7 +182,7 @@ export class HyperScroll extends Component {
         itemDom.style.setProperty('transform', `${ this._transProp }(${ t * this.state[this._itemDim] }px)`);
         return itemDom;
       };
-      return itemDom.update(null, i - this.itemsBuffer);
+      return itemDom.update(null, i - (this.itemsBuffer || this.state.itemsBuffer));
     }
   }
   _removeItem(i)  {

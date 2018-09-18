@@ -13,30 +13,39 @@ const dynamicStyle = new DynamicStyles(`
   }
   .edit-box textarea {
     width: 100%;  
+    position: absolute;
+    top: 0px;
     resize: none;
     border: none;
     padding: 9px;
+    margin: 0;
     color: black;
+    border-radius: 0;
     border-bottom: solid 1px ghostwhite;
     will-change: background-color, contents;
   }
   .edit-box input {
     width: 100%;
-    height: 31px;
+    height: 28px;
     position: absolute;
+    color: white;
     padding: 0;
     border: none;
-    bottom: -1px;
+    bottom: 0px;
     background-color: transparent;
   }
-  .edit-box input::after {
+  .edit-box::after {
     content: "CHANGE COLOR";
     position: absolute;
+    pointer-events: none;
     left: 0;
-    top: 9px;
+    bottom: 7px;
     color: black;
     width: 100%;
     text-align: center;
+  }
+  _::-webkit-full-page-media, _:future, :root .edit-box::after {
+    display: none;
   }
 `);
 
@@ -86,7 +95,7 @@ export class EditBox extends Component {
       >
         <textarea
           aria-label="text" oninput="${ this }" value="${ this.state.model.text }"
-          rows="5" cols="22" style="${ `background-color: ${ this.state.model.color }` }"
+          rows="4" cols="22" style="${ `background-color: ${ this.state.model.color }` }"
         ></textarea>
         <input aria-label="color" oninput="${ this }" value="${ rgbToHex(toRgb(this.state.model.color)) }" type="color">
       </div>
