@@ -77,6 +77,7 @@ export class HyperScroll extends Component {
 
     boundMethods(this, ['_manageScroll', '_refreshItems', '_createItem']);
     this._sparams = { left: 0, top: 0, behavior: 'smooth' };
+    this.ready = new Promise((r, j) => { this.ready_ok = r; this.ready_ko = j });
     this._ro = new ResizeObserver(this._refreshItems); //TODO: debounce _refreshItems
     this.setState(opts);
     this._setDir();
@@ -136,6 +137,7 @@ export class HyperScroll extends Component {
       this.state.itemHeight = dummy.offsetHeight;
       (this._itemsPool = []).push(document.body.removeChild(dummy));
       dummy.classList.replace('hs-dummy', 'hs-item');
+      (!this.state.itemWidth || !this.state.itemHeight) && this.ready_ko('item size not found.');
     }
   }
   _refreshItems(entry) {
@@ -150,6 +152,7 @@ export class HyperScroll extends Component {
     this._createItems(this.elemsCount);
     this.render();
     position && this.scroll(position, 'instant');
+    this.ready !== true && this.ready_ok(this), this.ready = true, this.ready_ko = this.ready_ok = null;
   }
   _createItems(len) {
     if(!this._itemsDom)

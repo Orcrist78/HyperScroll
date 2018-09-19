@@ -37,6 +37,7 @@ import {RowBox} from "./row-box.component.js";
   .container {
     width: calc(100% - 20px);
     margin: 0 auto 10px auto;
+    position: relative;
     background-color: antiquewhite;
     border: solid 10px darkslategray;
     border-radius: 5px;
@@ -54,8 +55,13 @@ import {RowBox} from "./row-box.component.js";
   }
   .container p {
     text-align: center;
-    line-height: 80px;
     color: black;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 2;
   }
 `)).inc();
 
@@ -79,6 +85,7 @@ export class MyTest extends Component {
       itemsBuffer: 4,
       component: RowBox
     });
+    this.hscroll1.ready.then(this.render.bind(this));
 
     this.hscroll2 = new HyperScroll({
       data: getItemsData(300, 'item'),
@@ -96,17 +103,18 @@ export class MyTest extends Component {
       component: EditBox
     });
 
-    this.hsPromise = (async () => (this.hscroll4 = new HyperScroll({
+    this.hscroll4 = (async () => new HyperScroll({
       data: await getImages(['ferrari', 'lamborghini', 'maserati', 'pagani', 'bugatti', 'porche', 'koenigsegg', 'mclaren']),
       itemsBuffer: 2,
       component: ImageBox
-    })))();
+    }))();
   }
   render() {
     return this.html`
       <h3 class="title">HYPER-SCROLL TEST PAGE</h3>
       <section class="container one">
         ${ this.hscroll1 }
+        ${{ html: !this.hscroll1 || this.hscroll1.ready !== true ? '<p>Loading ...</p>' : null }}
       </section>
       <section class="container two">
         ${ this.hscroll2 }
@@ -116,7 +124,7 @@ export class MyTest extends Component {
       </section>
       <section class="container four">
         ${{
-          any: this.hsPromise,
+          any: this.hscroll4,
           placeholder: { html: '<p>Loading ...</p>' }
         }}
       </section>
