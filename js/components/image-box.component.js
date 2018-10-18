@@ -44,11 +44,11 @@ export class ImageBox extends Component {
   }
   // noinspection JSMethodCanBeStatic
   onconnected() {
-    dynamicStyle.inc();
+    dynamicStyle.append();
   }
   // noinspection JSMethodCanBeStatic
   ondisconnected() {
-    dynamicStyle.dec();
+    dynamicStyle.remove();
   }
   render() {
     // noinspection HtmlUnknownAttribute
@@ -61,7 +61,7 @@ export class ImageBox extends Component {
         class="image-box"
       >
         <canvas
-          canvas-src="${ `https://rsz.io/${ this.state.img.substr(8) }?w=140&downscale-prefilter=true` }" <!-- TODO: handle pixelratio -->
+          canvas-src="${ this.state.img /*`https://rsz.io/${ this.state.img.substr(8) }?w=140&downscale-prefilter=true`*/ }" <!-- TODO: handle pixelratio -->
         ></canvas>
         <div>${ this.state.color }</div>
       </div>

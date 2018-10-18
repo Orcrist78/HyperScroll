@@ -21,14 +21,14 @@ export class DynamicStyles {
     this._count = 0;
     this._cssText = cssText;
   }
-  inc() {
+  append() {
     this._count++;
     if(this._count === 1 && !this.node) {
       this.node = document.createElement('style');
       document.head.appendChild(this.node).textContent = this._cssText;
     }
   }
-  dec() {
+  remove() {
     this._count--;
     if(!this._count && this.node) {
       this.node.remove();

@@ -32,11 +32,11 @@ export class TextBox extends Component {
   }
   // noinspection JSMethodCanBeStatic
   onconnected() {
-    dynamicStyle.inc();
+    dynamicStyle.append();
   }
   // noinspection JSMethodCanBeStatic
   ondisconnected() {
-    dynamicStyle.dec();
+    dynamicStyle.remove();
   }
   render() { // TODO: create a template for text/row-box
     // noinspection HtmlUnknownAttribute

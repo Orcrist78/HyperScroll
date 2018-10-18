@@ -28,7 +28,7 @@ import {DynamicStyles} from "../libs/dynamic-style.js";
     transition: opacity 250ms;
     opacity: 1;
   }
-`)).inc();
+`)).append();
 
 const srcBmpMap = new Map();
 const elImgMap = new WeakMap();
@@ -45,7 +45,7 @@ const drawImg = (canvas, img) => { // TODO: handle pixelratio
 hyper.define('canvas-src', (el, src) => {
   let bmp = srcBmpMap.get(src);
 
-  el.classList.contains('show') && el.classList.remove('show');
+  el.classList.remove('show');
   if(bmp)
     drawImg(el, bmp);
   else {
@@ -53,19 +53,20 @@ hyper.define('canvas-src', (el, src) => {
 
     if(img) {
       if(img.src !== src) {
-        img.onload = null;
         img.src = '';
       } else
         return;
-    } else
+    } else {
       img = new Image();
+      elImgMap.set(el, img);
+      img.onload = async () => {
+        img.onload = img.onerror = img.onabort = null;
+        elImgMap.delete(el);
+        drawImg(el, srcBmpMap.set(src, bitmap ? await createImageBitmap(img) : img).get(src)) // TODO: move createBitmap on worker ?
+      };
+      img.onerror = img.onabort = () => img.src && (img.src = '');
+    }
 
-    elImgMap.set(el, img);
-    img.onload = async () => { // TODO: handle error and abort cases
-      img.onload = null;
-      elImgMap.delete(el);
-      drawImg(el, srcBmpMap.set(src, bitmap ? await createImageBitmap(img) : img).get(src)) // TODO: move createBitmap on worker ?
-    };
     img.src = src;
   }
 });

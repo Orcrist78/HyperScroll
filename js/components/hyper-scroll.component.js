@@ -15,7 +15,7 @@
   OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
   PERFORMANCE OF THIS SOFTWARE.
 
-  HyperScroll@0.2.1Alpha
+  HyperScroll@0.3.1Alpha
 */
 
 
@@ -96,14 +96,14 @@ export class HyperScroll extends Component {
     const style = this._wire$.firstElementChild.style;
     const css = style.setProperty.bind(style);
 
-    dynamicStyle.inc();
+    dynamicStyle.append();
     await this._getItemSize();
     css(`--hsi-${ this._hsDim }`, `${ this.state[this._itemDim] }px`);
     css(`--hss-${ this._hsDim }`, `${ this.state[this._itemDim] * this.state.data.length }px`);
     this._ro.observe(this._wire$);
   }
   ondisconnected() {
-    dynamicStyle.dec();
+    dynamicStyle.remove();
     this._ro.disconnect();
   }
   onscroll() {
@@ -147,12 +147,13 @@ export class HyperScroll extends Component {
     this.itemsBuffer = this.state.itemsBuffer;
     this._wire$[this._scrollProp] = this.position = this.current = 0;
     this.elemsView = Math.min(dataLen, Math.ceil(entry[0].contentRect[this._hsDim] / this.state[this._itemDim]));
-    this.elemsCount = Math.min(dataLen, this.elemsView + (this.itemsBuffer * 2));
+    this.elemsCount = this.elemsView + (this.itemsBuffer * 2);
     if(this.elemsCount === dataLen) this.itemsBuffer = 0;
     this._createItems(this.elemsCount);
     this.render();
     position && this.scroll(position, 'instant');
-    this.ready !== true && this.ready_ok(this), this.ready = true, this.ready_ko = this.ready_ok = null;
+    // noinspection CommaExpressionJS, JSValidateTypes
+    this.ready !== true && (this.ready_ok(this), this.ready = true, this.ready_ko = this.ready_ok = null);
   }
   _createItems(len) {
     if(!this._itemsDom)
@@ -188,7 +189,7 @@ export class HyperScroll extends Component {
       return itemDom.update(null, i - (this.itemsBuffer || this.state.itemsBuffer));
     }
   }
-  _removeItem(i)  {
+  _removeItem()  {
     if(this.state.maxPoolDim > (this._itemsPool || (this._itemsPool = [])).length)
       this._itemsPool.push(this._itemsDom.pop());
   }

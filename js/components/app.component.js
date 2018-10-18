@@ -63,7 +63,7 @@ import {RowBox} from "./row-box.component.js";
     margin: 0;
     z-index: 2;
   }
-`)).inc();
+`)).append();
 
 const getItemsData = (count, txt) => Array(count).fill(0).map((d, i) => ({ model: {
   color: `hsl(${ Math.random() * 360 }, 95%, 80%)`,

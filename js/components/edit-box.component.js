@@ -78,11 +78,11 @@ export class EditBox extends Component {
   }
   // noinspection JSMethodCanBeStatic
   onconnected() {
-    dynamicStyle.inc();
+    dynamicStyle.append();
   }
   // noinspection JSMethodCanBeStatic
   ondisconnected() {
-    dynamicStyle.dec();
+    dynamicStyle.remove();
   }
   render() {
     // noinspection HtmlUnknownAttribute
