@@ -45,7 +45,6 @@ const drawImg = (canvas, img) => { // TODO: handle pixelratio
 hyper.define('canvas-src', (el, src) => {
   let bmp = srcBmpMap.get(src);
 
-  el.classList.remove('show');
   if(bmp)
     drawImg(el, bmp);
   else {

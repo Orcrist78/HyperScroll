@@ -22,23 +22,25 @@ export class DynamicStyles {
     this._cssText = cssText;
   }
   append() {
-    this._count++;
-    if(this._count === 1 && !this.node) {
-      this.node = document.createElement('style');
-      document.head.appendChild(this.node).textContent = this._cssText;
-    }
+    !this._count++ && !this.node && (
+      document.head.appendChild((
+        this.node = document.createElement('style')
+      ))
+        .textContent = this._cssText
+    )
   }
   remove() {
-    this._count--;
-    if(!this._count && this.node) {
-      this.node.remove();
-      this.node = null;
-    }
+    this._count && !--this._count && this.node && !this.node.remove() && (
+      this.node = null
+    );
   }
   add(selectorText, cssText) {
-    if(!this.node) return null;
-
-    return this.node.sheet.cssRules[this.node.sheet.insertRule(`${ selectorText } { ${ cssText } }`)];
+    return this.node ?
+        this.node.sheet.cssRules[
+          this.node.sheet.insertRule(`${ selectorText } { ${ cssText } }`)
+        ]
+      :
+        null;
   }
   del(rule) {
     const idx = [...this.node.sheet.cssRules].indexOf(rule);
